@@ -10,6 +10,7 @@ import { connectDB } from "./lib/db.js";
 import { clerkMiddleware } from '@clerk/express'
 import fileUpload from "express-fileupload";
 import path from "path";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,10 @@ const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(clerkMiddleware());
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true
+}));
 app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: path.join(__dirname, 'tmp'),
@@ -39,7 +44,10 @@ app.use((err, req, res, next)=>{
 });
 
 app.listen(PORT, () => {
-    console.log("server is running on port " + PORT);
+    console.log(`Server listening at http://localhost:${PORT}`);
     connectDB();
     console.log("Database connected successfully");
 });
+
+//todo: socket.io
+//todo: 
